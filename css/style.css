@@ -201,12 +201,72 @@ table { border-collapse: collapse; border-spacing: 0; }
    Author: Paul
    ========================================================================== */
 
+body {
+  font-family: "Palatino", Serif;
+  background-image: -webkit-gradient(
+    linear,
+    left bottom,
+    left top,
+    color-stop(0, rgb(179,179,179)),
+    color-stop(0.59, rgb(255,255,255))
+  );
+  background-image: -moz-linear-gradient(
+    center bottom,
+    rgb(179,179,179) 0%,
+    rgb(255,255,255) 100%
+  );
+  background-repeat: no-repeat;
+}
+
+a {
+  border-bottom: 1px rgb(50,50,50) dotted;
+  color: rgb(50,50,50);
+  text-decoration: none;
+}
+
+a:hover {
+  color: rgb(75,75,75);
+}
+
+a:visited {
+  color: rgb(100,100,100);
+}
 
 body > .wrapper {
   display: table;
   padding-left: 2em;
   padding-right : 2em;
 }
+
+hgroup {
+  margin-left: 1em;
+}
+
+hgroup > h1 {
+  font-size: 4em;
+  text-shadow: 4px 4px 4px gray;
+  margin : 0.2em;
+}
+
+hgroup > p {
+  font-size: 1.5em;
+  text-shadow: 4px 4px 4px gray;
+  margin-left : 2em;
+}
+
+.rotated {
+  opacity: 0.3;
+  -moz-transform: rotate(90deg);
+  font-size: 15em;
+  position: absolute;
+  top: 4em;
+  right: -40%;
+  font-variant: small-caps;
+  font-weight: 700;
+  width: 100%;
+  text-align: right;
+}
+
 .wrapper > .row {
   display: table-row;
 }
@@ -221,6 +281,7 @@ body > .wrapper {
 }
 
 .cell > img {
+  cursor: pointer;
   box-shadow: 4px 4px 4px black;
 }
 
@@ -251,11 +312,13 @@ body > .wrapper {
   background-image: radial-gradient(50% 50%, circle farthest-side, #222222, #000000 100%);
   left: 0px;
   opacity: 0.9;
-  position: absolute;
+  position: fixed;
   top: 0px;
   transition-duration: 1s, 1s;
   transition-property: opacity;
   z-index: 2;
+  width: 100%;
+  height: 100%;
 }
 
 .back[hide=true] {
@@ -264,33 +327,42 @@ body > .wrapper {
 }
 
 .diaporama {
-  position: absolute;
+  position: fixed;
   top: 5%;
   left: 5%;
   height: 90%;
   width: 90%;
+  max-height: 80%;
+  margin-left: auto;
+  margin-right: auto;
   z-index: 3;
-  border: 2px solid white;
-  border-radius: 4px;
-  box-shadow: 4px 4px 4px black;
   display: table;
+  -moz-transition-duration: 0.5s, 0.5s;
+  -moz-transition-property: opacity scale;
+  -webkit-transition-duration: 0.5s, 0.5s;
+  -webkit-transition-property: opacity scale;
+  transition-duration: 0.5s, 0.5s;
+  transition-property: opacity, scale;
+  -moz-transform: scale(1);
 }
 
 .diaporama[hide=true] {
   opacity: 0;
   z-index: -1;
+  -moz-transform: scale(0.1);
 }
 
 .diaporama > .wrapper {
   display: table-cell;
+  vertical-align: middle;
   width: 100%;
 }
 
 .diaporama > .wrapper > img{
+  cursor: pointer;
   display: block;
   margin-left: auto;
   margin-right: auto;
-  vertical-align: middle;
 }
 
 .diaporama > .wrapper > p {
@@ -298,20 +370,29 @@ body > .wrapper {
   text-align: center;
 }
 
-.diaporama > .close {
-  position: relative;
-  top: 0%;
-  left: 0%;
-  margin-left: -1.5em;
-  margin-top: -1.5em;
+.ctrlWrap {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  text-align:center;
+}
+
+.ctrlWrap > .ctrl {
   color: white;
-  font-weight: 700;
-  border: 2px solid white;
-  border-radius: 100%;
   cursor: pointer;
-  width: 1em;
-  height: 1em;
-  text-align: center;
+  font-size: 2.5em;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+}
+
+footer {
+  text-align: right;
+  margin-bottom: 1em;
+  margin-right: 2em;
+  font-size: 1em;
 }
 
 /* =============================================================================

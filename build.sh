@@ -1,27 +1,23 @@
 #!/bin/sh
 
 # Pack CSS in out.css
-cat css/style.css | sed -e '
-s/^[ \t]*//g;         # remove leading space
-s/[ \t]*$//g;         # remove trailing space
-s/\([:{;,]\) /\1/g;   # remove space after a colon, brace, semicolon, or comma
-s/ {/{/g;             # remove space before a semicolon
-s/\/\*.*\*\///g;      # remove comments
-/^$/d                 # remove blank lines
-' | sed -e :a -e '$!N; s/\n\(.\)/\1/; ta # remove all newlines
-' > out.css
+./comments.sed < css/style.css > out.css
+sed ':a;N;$!ba;s/\n/ /g' out.css | tr -s ' ' > out2.css
+mv out2.css out.css
 
 # Put it in index.html
-sed 's/__CSS__/`cat out.css`/' yadfig.html > index.html
+echo "css"
+python rep.py out.css yadfig.html __CSS__ > index.html
 
-rm out.css
-
-# minify js
+echo "js"
 jsmin < js/script.js > out.js
 
-sed -i 's/__SCRIPT__/`cat out.js`/' index.html
+python rep.py out.js index.html __SCRIPT__> index2.html
+mv index2.html index.html
 
+echo "py"
+python rep.py index.html yadfig.py __TEMPLATE__ > yadfig
+
+rm index.html
 rm out.js
-
-sed 's/__TEMPLATE__/`cat index.html`/' yadfig.py > yadfig
-
+rm out.css

@@ -13,69 +13,7 @@ import Image
 PLACE=""
 TITLE=""
 ROWCOUNT=4
-template='''
-<!doctype html>
-<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en"> <![endif]-->
-<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en"> <![endif]-->
-<!--[if IE 8]>    <html class="no-js ie8 oldie" lang="en"> <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
-<head>
-	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-
-	<title>__TITLE__</title>
-	<meta name="description" content="">
-	<meta name="author" content="">
-
-	<meta name="viewport" content="width=device-width,initial-scale=1">
-
-	<link rel="stylesheet" href="css/style.css">
-
-</head>
-<body onload="init()">
-
-<a name="top" id="top"></a>
-
-<header>
-  <hgroup>
-    <h1>__TITLE__</h1>
-    <p>__DATE__, __PLACE__</p>
-  </hgroup>
-</header>
-<span class="rotated"></span>
-
-<div class="wrapper">
-  __GALLERY__
-</div>
-
-
-<footer>
-<p>Made with my ten fingers, vim, Firefox &amp; ♥ &mdash;
-  <a href="#top" class="anchorLink">Top</a>
-  <a href="http://blog.paul.cx">Blog</a>
-</p>
-</footer>
-
-<div class="back" hide="true"></div>
-<div class="diaporama" hide="true">
-  <div class="wrapper">
-  <div class="ctrlWrap">
-    <span id="prev" class="ctrl">←</span>
-    <span id="close" class="ctrl">&otimes;</span>
-    <span id="next" class="ctrl">→</span>
-  </div>
-  </div>
-</div>
-
-<script src="js/script.js"></script>
-
-<!--[if lt IE 7 ]>
-	<script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.2/CFInstall.min.js"></script>
-	<script>window.attachEvent("onload",function(){CFInstall.check({mode:"overlay"})})</script>
-<![endif]-->
-
-</body>
-</html>'''
+template='''__TEMPLATE__'''
 
 images = list()
 exif_keys = ['Exif.Image.Make',
@@ -111,9 +49,12 @@ def list_files():
   filenames = os.listdir(os.curdir)
   for i in filenames:
     if is_image(str(mimetypes.guess_type(i)[0])):
-      image = pyexiv2.Image(i)
-      image.readMetadata()
-      images.append([i, image])
+      try:
+        image = pyexiv2.Image(i)
+        image.readMetadata()
+        images.append([i, image])
+      except:
+        continue
 
 def get_pictures():
   i = 0
@@ -135,7 +76,10 @@ def get_pictures():
 def get_date_interval():
     dates = list()
     for i in images:
-      dates.append(i[1]['Exif.Image.DateTime'])
+      try:
+        dates.append(i[1]['Exif.Image.DateTime'])
+      except:
+        continue
     dates.sort()
     print len(dates)
     formatdate = "%d %B %Y"

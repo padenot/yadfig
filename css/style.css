@@ -255,16 +255,20 @@ hgroup > p {
 }
 
 .rotated {
-  opacity: 0.3;
-  -moz-transform: rotate(90deg);
-  font-size: 15em;
-  position: absolute;
-  top: 4em;
-  right: -40%;
-  font-variant: small-caps;
-  font-weight: 700;
-  width: 100%;
-  text-align: right;
+    -moz-transform: rotate(90deg);
+    -moz-transform-origin: left top;
+    -webkit-transform: rotate(90deg);
+    -webkit-transform-origin: left top;
+    font-size: 15em;
+    font-variant: small-caps;
+    font-weight: 700;
+    left: 100%;
+    margin-top: -0.5em;
+    opacity: 0.3;
+    padding-left: 0;
+    position: absolute;
+    right: -1em;
+    width: 100%;
 }
 
 .wrapper > .row {
@@ -288,11 +292,15 @@ hgroup > p {
 .cell[zoomed=true] {
   -moz-transition: -moz-transform 1s ease-in-out;
   -moz-transform: scale(3);
+  -webkit-transition: -webkit-transform 1s ease-in-out;
+  -webkit-transform: scale(3);
 }
 
 .cell[hires=true] {
   -moz-transition: -moz-transform 0s ease-in-out;
   -moz-transform: scale(1);
+  -webkit-transition: -webkit-transform 0s ease-in-out;
+  -webkit-transform: scale(1);
   position: absolute;
   top: 10%;
   left: 10%;
@@ -350,6 +358,7 @@ hgroup > p {
   opacity: 0;
   z-index: -1;
   -moz-transform: scale(0.1);
+  -webkit-transform: scale(0.1);
 }
 
 .diaporama > .wrapper {

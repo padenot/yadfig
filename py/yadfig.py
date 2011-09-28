@@ -16,26 +16,6 @@ ROWCOUNT=4
 template='''__TEMPLATE__'''
 
 images = list()
-exif_keys = ['Exif.Image.Make',
-'Exif.Image.Model',
-'Exif.Image.Orientation',
-'Exif.Image.XResolution',
-'Exif.Image.YResolution',
-'Exif.Image.ResolutionUnit',
-'Exif.Image.Software',
-'Exif.Image.DateTime',
-'Exif.Image.ExifTag',
-'Exif.Photo.ExposureTime',
-'Exif.Photo.FNumber',
-'Exif.Photo.ExposureProgram',
-'Exif.Photo.ISOSpeedRatings',
-'Exif.Photo.ExifVersion',
-'Exif.Photo.ExposureBiasValue',
-'Exif.Photo.MaxApertureValue',
-'Exif.Photo.MeteringMode',
-'Exif.Photo.LightSource',
-'Exif.Photo.Flash',
-'Exif.Photo.FocalLength']
 
 def is_image(mime):
   if mime.find("image") == 0:
@@ -47,14 +27,11 @@ def list_files():
     os.makedirs(".c")
 
   filenames = os.listdir(os.curdir)
-  for i in filenames:
-    if is_image(str(mimetypes.guess_type(i)[0])):
-      try:
-        image = pyexiv2.Image(i)
-        image.readMetadata()
-        images.append([i, image])
-      except:
-        continue
+  for name in filenames:
+    if is_image(str(mimetypes.guess_type(name)[0])):
+      metadata = pyexiv2.ImageMetadata(name)
+      metadata.read()
+      images.append([name, metadata])
 
 def get_pictures():
   i = 0
@@ -77,11 +54,10 @@ def get_date_interval():
     dates = list()
     for i in images:
       try:
-        dates.append(i[1]['Exif.Image.DateTime'])
-      except:
+        dates.append(i[1]['Exif.Image.DateTime'].value)
+      except KeyError:
         continue
     dates.sort()
-    print len(dates)
     formatdate = "%d %B %Y"
     formattime = "%H:%M"
     formatfull = formatdate + " at " + formattime
@@ -96,10 +72,12 @@ def output_html():
     global template
     template = template.replace('__TITLE__', TITLE)
     template = template.replace('__PLACE__', PLACE)
-    template = template.replace('__DATE__', get_date_interval())
+    if not PLACE:
+      template = template.replace('__DATE__', get_date_interval())
+    else:
+      template = template.replace('__DATE__', get_date_interval()+',')
     pics = get_pictures()
     template = template.replace('__GALLERY__', pics);
-    #print template
     f = open("index.html", "w")
     f.write(template)
     f.close()
@@ -108,7 +86,7 @@ def create_thumbs():
     for i in images:
         im = Image.open(i[0])
         im.thumbnail([im.size[0]/4, im.size[0]/4], Image.ANTIALIAS)
-        im.save(".c/"+i[0], "JPEG")
+        im.save(".c/"+i[0])
 
 
 def usage():
@@ -122,20 +100,17 @@ def main():
     global PLACE
     try:
         arg, opts = getopt.getopt(sys.argv[1:], "hp:t:", ["help", "place", "title"])
-        print arg, opts
     except getopt.GetoptError, err:
         print str(err)
         usage()
         sys.exit(2)
     for o, a in arg:
         if o in ("-p", "--place"):
-            print "got a place"
             PLACE=a
         elif o in ("-h", "--help"):
             usage()
             sys.exit()
         elif o in ("-t", "--title"):
-            print "got a title"
             TITLE=a
         else:
             assert False, "unhandled option"
@@ -143,6 +118,7 @@ def main():
     images.sort()
     create_thumbs()
     output_html()
+    print "generated index.html & .c/"
 
 if __name__ == "__main__":
     main()

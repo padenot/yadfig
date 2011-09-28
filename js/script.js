@@ -2,6 +2,8 @@
  * Paul
  */
 
+"use strict";
+
 function $(e) {
   return document.querySelector(e);
 }
@@ -16,8 +18,9 @@ function $$(e) {
 function indexOf(array, element) {
   var i = array.length;
   while(i--) {
-    if (array[i] == element)
+    if (array[i] === element) {
       return i;
+    }
   }
   return -1;
 }
@@ -46,6 +49,16 @@ function log(msg) {
   }
 }
 
+function onClickImage(e) {
+  e.stopPropagation();
+  var image = e.target.parentNode;
+  if(!image.getAttribute("zoomed")) {
+    diaporamaIn(image);
+  } else {
+    diaporamaOut();
+  }
+}
+
 function init() {
   var title = $("hgroup h1").innerHTML;
   $(".rotated").innerHTML = title;
@@ -64,16 +77,6 @@ function init() {
   $("#prev").addEventListener("click", prev, false);
 
   $("#next").addEventListener("click", next, false);
-}
-
-function onClickImage(e) {
-  e.stopPropagation();
-  var image = e.target.parentNode;
-  if(!image.getAttribute("zoomed")) {
-    diaporamaIn(image);
-  } else {
-    diaporamaOut();
-  }
 }
 
 function next(e) {

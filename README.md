@@ -17,6 +17,12 @@ http://paul.cx/photos/sweden/vasa/
 
 ## Ok, I'm convinced, what next ?
 
+### I just want to use it, you know…
+Then grab `yadfig` in the download section, and make sure to have `pyexiv2` & `PIL`
+installed (as well as Python, of course), and you're good to go.
+
+### I want to build it myself from source…
+
 You need to install the dependencies : `jsmin` and a couple Python libraries. On
 a Debian-like system, this line should do the job:
 
@@ -39,8 +45,11 @@ chmod +x yadfig
 mv yadfig ~/bin # or other directory in $PATH
 ````
 
-Then you can enjoy `yadfig`: go to a directory which happen to contain pictures
-(it supports all formats that PIL support), and invoke :
+## Usage
+
+To enjoy `yadfig`, go to a directory which happen to contain pictures
+(it supports all formats that PIL support, and there's formats you probably
+_never heard about_), and invoke :
 
 ```
 yadfig

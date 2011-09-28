@@ -18,7 +18,7 @@ http://paul.cx/photos/sweden/vasa/
 ## Ok, I'm convinced, what next ?
 
 ### I just want to use it, you know…
-Then grab `yadfig` in the download section, and make sure to have `pyexiv2` & `PIL`
+Then grab `yadfig` in the download section, make sure to have `pyexiv2` & `PIL`
 installed (as well as Python, of course), and you're good to go.
 
 ### I want to build it myself from source…

@@ -1,6 +1,6 @@
-# yadfig, a dame fine image gallery generator
+# yadfig, a damn fine image gallery generator
 
-## Once was genethumb.sh
+## Once was genethumb.sh…
 
 Yes, it worked quite nicely, but it was kind of ugly and sucked (according to
 its creator). At the price of a few dependencies (`pyexiv2` and PIL, since I don't
@@ -51,14 +51,14 @@ thumbnails. If you want to, you can invoke it that way :
 yadfig -p "The location where the photo were taken" -t "A title"
 ```
 
-## Yeah, but it doesn't do _that_
+## Yeah, but it doesn't do _that_ !
 Patches are welcome.
 
-## It's broken, I use IE or Opera
+## It's broken, I use IE or Opera !
 I haven't tested IE, and Opera for 30 seconds, and it silently failed. There are
 great free and open-source browser you can try instead that happen to work.
 
-## You code is crappy
+## You code is crappy !
 I know, I begining messing with js and web stuff. The codebase quality will
 eventually get better with time. If you see something really nasty, drop me a
 line at @padenot or somewhere else.
@@ -66,5 +66,8 @@ line at @padenot or somewhere else.
 ## Why hot pink when the text is highlighted ?
 This guy knows why, and I aggree : http://paulirish.com.
 
-# License
-New BSD License http://www.freebsd.org/copyright/license.html
+## License
+New BSD License : http://www.freebsd.org/copyright/license.html
+
+## Tools
+js, html5 & css3, python, PIL, pyexiv2, sh, vim, love.

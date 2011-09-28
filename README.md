@@ -8,7 +8,7 @@ consider python to be a real dependency on a machine that will host pictures),
 you can have something much nicer (in my point of view).
 
 As `genethumb.sh`, is produces a single HTML file, which should work in any
-reasonably recent web browser (since it uses HTML & co. delicacies), and is very
+reasonably recent web browser (since it uses HTML5 & co. delicacies), and is very
 easy to host on any web server, without having to use any server side
 programming, hopefully increasing speed and security.
 
@@ -17,14 +17,16 @@ http://paul.cx/photos/sweden/vasa/
 
 ## Ok, I'm convinced, what next ?
 
-You need to install the dependencies : `jsmin` and a couple python library.
+You need to install the dependencies : `jsmin` and a couple Python libraries. On
+a Debian-like system, this line should do the job:
 
     sudo aptitude install python-pyexiv2 python-imaging
 
 The build script uses `sed` (any flavor) and `tr`, but everybody should have
-those. Also, put a copy of jsmin (compiled from 
+those. Also, put a copy of `jsmin` (compiled from 
 [this file](http://www.crockford.com/javascript/jsmin.c)), and put it somewhere in
-the `$PATH`. `pyexiv2` should be in version 0.3.
+the `$PATH`. `pyexiv2` should be in version 0.3, there is an API compatibility
+break somewhere in the previous versions.
 
 Speaking of build script, here are the steps to install it when dependencies are
 satisfied :
@@ -32,7 +34,7 @@ satisfied :
 ``` sh
 git clone https://github.com/padenot/yadfig
 cd yadfig
-./build
+./build.sh
 chmod +x yadfig
 mv yadfig ~/bin # or other directory in $PATH
 ````
@@ -51,17 +53,19 @@ thumbnails. If you want to, you can invoke it that way :
 yadfig -p "The location where the photo were taken" -t "A title"
 ```
 
+It produces a somwhat nicer output.
+
 ## Yeah, but it doesn't do _that_ !
-Patches are welcome.
+Patches are welcome, but the whole thing is aimed at simplicity.
 
 ## It's broken, I use IE or Opera !
 I haven't tested IE, and Opera for 30 seconds, and it silently failed. There are
 great free and open-source browser you can try instead that happen to work.
 
 ## You code is crappy !
-I know, I begining messing with js and web stuff. The codebase quality will
+I know, I just started with js and web stuff. The codebase quality will
 eventually get better with time. If you see something really nasty, drop me a
-line at @padenot or somewhere else.
+line at [@padenot](http://twitter.com/padenot) or somewhere else.
 
 ## Why hot pink when the text is highlighted ?
 This guy knows why, and I aggree : http://paulirish.com.
@@ -70,4 +74,5 @@ This guy knows why, and I aggree : http://paulirish.com.
 New BSD License : http://www.freebsd.org/copyright/license.html
 
 ## Tools
-js, html5 & css3, python, PIL, pyexiv2, sh, vim, love.
+js, html5 & css3, python, PIL, pyexiv2, sh, vim, html5boilerplate, obviously
+Firefox and Chromium, love.

@@ -82,7 +82,9 @@ function init() {
 function next(e) {
   if (mode == "diaporama") {
     currentImage = (currentImage + 1) % images.length;
-    $('.diaporama img').src = getHiResUrl(images[currentImage].src);
+    var img = $('.diaporama img');
+    img.style.opacity = 0;
+    img.src = getHiResUrl(images[currentImage].src);
     checkImageSize();
   }
 }
@@ -90,7 +92,9 @@ function next(e) {
 function prev(e) {
   if (mode == "diaporama") {
     currentImage = currentImage == 0 ? images.length - 1 : currentImage - 1;
-    $('.diaporama img').src = getHiResUrl(images[currentImage].src);
+    var img = $('.diaporama img');
+    img.style.opacity = 0;
+    img.src = getHiResUrl(images[currentImage].src);
     checkImageSize();
   }
 }
@@ -123,10 +127,20 @@ function clickDiaporama(e) {
 
 function checkImageSize() {
     var wrapper = $('.diaporama .wrapper');
-    wrapper.querySelector("img").addEventListener("load", function () {
-    var size = wrapper.querySelector("img").naturalHeight;
-    var ratio = wrapper.offsetHeight / window.innerHeight * 0.8;
-    wrapper.querySelector("img").style.height = window.innerHeight * 0.8 + "px";
+    var i = wrapper.querySelector("img");
+    i.style.height = "";
+    i.style.width = "";
+    i.addEventListener("load", function () {
+      var height = i.naturalHeight;
+      var width = i.naturalWidth;
+      if (height > window.innerHeight * 0.8 || width > window.innerWidth * 0.8) {
+        if (width/window.innerWidth*0.8 > height/window.innerHeight*0.8) {
+          i.style.width = window.innerWidth * 0.8 + "px";
+        } else {
+          i.style.height = window.innerHeight * 0.8 + "px";
+        }
+      }
+      i.style.opacity = 1;
   }, false);
 }
 

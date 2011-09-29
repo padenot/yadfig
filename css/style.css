@@ -274,6 +274,7 @@ hgroup > p {
     opacity: 0.3;
     position: absolute;
     font-size: 13em;
+    z-index: -1;
 }
 
 .wrapper > .row {

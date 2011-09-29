@@ -10,10 +10,30 @@ import datetime
 import getopt
 import Image
 
+class bcolors:
+    HEADER = '\033[95m'
+    OKBLUE = '\033[94m'
+    OKGREEN = '\033[92m'
+    WARNING = '\033[93m'
+    FAIL = '\033[91m'
+    ENDC = '\033[0m'
+    BOLD = "\033[1m"
+
+    def disable(self):
+        self.HEADER = ''
+        self.OKBLUE = ''
+        self.OKGREEN = ''
+        self.WARNING = ''
+        self.FAIL = ''
+        self.ENDC = ''
+        self.BOLD = ''
+
 PLACE=""
 TITLE=""
 ROWCOUNT=4
 template='''__TEMPLATE__'''
+THUMB_DIR=".c"
+DIR=os.curdir
 
 images = list()
 
@@ -23,15 +43,27 @@ def is_image(mime):
   return False
 
 def list_files():
-  if not os.path.exists(".c"):
-    os.makedirs(".c")
+    try:
+        os.stat(DIR)
+        full = os.path.join(DIR, THUMB_DIR)
+        if not os.path.exists(full):
+            os.makedirs(full)
+    except os.error, err:
+        print bcolors.FAIL + str(err) + bcolors.ENDC
+        exit(1)
 
-  filenames = os.listdir(os.curdir)
-  for name in filenames:
-    if is_image(str(mimetypes.guess_type(name)[0])):
-      metadata = pyexiv2.ImageMetadata(name)
-      metadata.read()
-      images.append([name, metadata])
+    filenames = os.listdir(DIR)
+
+    for name in filenames:
+        name = os.path.join(DIR, name)
+        if is_image(str(mimetypes.guess_type(name)[0])):
+            metadata = pyexiv2.ImageMetadata(name)
+            metadata.read()
+            images.append([name, metadata])
+    if len(images) == 0:
+        print bcolors.WARNING + "No pictures found in "+DIR+", exiting." + bcolors.ENDC
+        exit(1)
+
 
 def get_pictures():
   i = 0
@@ -57,6 +89,10 @@ def get_date_interval():
         dates.append(i[1]['Exif.Image.DateTime'].value)
       except KeyError:
         continue
+    if len(dates) == 0:
+      print bcolors.WARNING + "No dates found in EXIF metadata. Disabling date output" + bcolors.ENDC
+      return "";
+
     dates.sort()
     formatdate = "%d %B %Y"
     formattime = "%H:%M"
@@ -86,39 +122,45 @@ def create_thumbs():
     for i in images:
         im = Image.open(i[0])
         im.thumbnail([im.size[0]/4, im.size[0]/4], Image.ANTIALIAS)
-        im.save(".c/"+i[0])
+        thumb = os.path.join(os.path.dirname(i[0]), THUMB_DIR, os.path.basename(i[0]))
+        im.save(thumb)
 
 
 def usage():
     print "Usage:  %s [-p|--place] name [-t|--title] title" % os.path.basename(sys.argv[0])
-    print "\n\tCreate a photo gallery in index.html and a thumbnail directory, .c.\n"
-    print "\t-p|--place : name of the place the photo have been taken."
-    print "\t-t|--title : a title for the page."
+    print "\n\tCreate a photo gallery in index.html and a thumbnail directory,"+THUMB_DIR+"/.\n"
+    print "\t-p : name of the place the photo have been taken."
+    print "\t-t : a title for the page."
+    print "\t-d : a directory to operate on."
 
 def main():
-    global TITLE
-    global PLACE
+    global TITLE, PLACE, DIR
     try:
-        arg, opts = getopt.getopt(sys.argv[1:], "hp:t:", ["help", "place", "title"])
+        arg, opts = getopt.getopt(sys.argv[1:], "hp:t:d:")
     except getopt.GetoptError, err:
-        print str(err)
+        print bcolors.WARNING + str(err) + bcolors.ENDC
         usage()
         sys.exit(2)
+
     for o, a in arg:
-        if o in ("-p", "--place"):
+        if o in "-p":
             PLACE=a
-        elif o in ("-h", "--help"):
-            usage()
-            sys.exit()
-        elif o in ("-t", "--title"):
+        elif o in "-h":
+            usage
+            sys.exit
+        elif o in "-t":
             TITLE=a
+        elif o in "-d":
+            DIR=a
         else:
             assert False, "unhandled option"
     list_files()
     images.sort()
     create_thumbs()
     output_html()
-    print "generated index.html & .c/"
+    print bcolors.OKGREEN + "Generation successful:"
+    print "\t" + os.path.join(DIR,"index.html")
+    print "\t" + os.path.join(DIR,THUMB_DIR)+ " for " + str(len(images)) + " pictures." + bcolors.ENDC
 
 if __name__ == "__main__":
     main()

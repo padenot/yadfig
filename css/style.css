@@ -202,6 +202,7 @@ table { border-collapse: collapse; border-spacing: 0; }
    ========================================================================== */
 
 body {
+  margin: auto;
   font-family: "Palatino", Serif;
   background-image: -webkit-gradient(
     linear,
@@ -210,12 +211,17 @@ body {
     color-stop(0, rgb(179,179,179)),
     color-stop(0.59, rgb(255,255,255))
   );
-  background-image: -moz-linear-gradient(
+  background: -moz-linear-gradient(
     center bottom,
     rgb(179,179,179) 0%,
     rgb(255,255,255) 100%
   );
+  background-color: rgb(179, 179, 179);
   background-repeat: no-repeat;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
 }
 
 a {
@@ -261,16 +267,13 @@ hgroup > p {
     -webkit-transform-origin: left top;
     -o-transform: rotate(90deg);
     -o-transform-origin: left top;
-    font-size: 15em;
     font-variant: small-caps;
     font-weight: 700;
-    left: 100%;
-    margin-top: -0.5em;
+    left: 99%;
+    top: 10%;
     opacity: 0.3;
-    padding-left: 0;
     position: absolute;
-    right: -1em;
-    width: 100%;
+    font-size: 13em;
 }
 
 .wrapper > .row {
@@ -419,9 +422,8 @@ hgroup > p {
 }
 
 footer {
-  text-align: right;
   margin-bottom: 1em;
-  margin-right: 2em;
+  margin-left : 2em;
   font-size: 1em;
 }
 

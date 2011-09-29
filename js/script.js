@@ -61,7 +61,10 @@ function onClickImage(e) {
 
 function init() {
   var title = $("hgroup h1").innerHTML;
-  $(".rotated").innerHTML = title;
+  var rotated = $(".rotated")
+  var body = $("html")
+  rotated.innerHTML = title;
+
   images = $$('.thumb');
   for (var i = 0; i < images.length; i++) {
     images[i].addEventListener("click", onClickImage, false);

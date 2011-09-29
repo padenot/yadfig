@@ -55,9 +55,10 @@ def list_files():
     filenames = os.listdir(DIR)
 
     for name in filenames:
-        name = os.path.join(DIR, name)
-        if is_image(str(mimetypes.guess_type(name)[0])):
-            metadata = pyexiv2.ImageMetadata(name)
+        full_name = os.path.join(DIR, name)
+        print name
+        if is_image(str(mimetypes.guess_type(full_name)[0])):
+            metadata = pyexiv2.ImageMetadata(full_name)
             metadata.read()
             images.append([name, metadata])
     if len(images) == 0:
@@ -76,7 +77,7 @@ def get_pictures():
     out+='<div class="cell"><img class="thumb" src=".c/'
     out+=image[0]
     out+='"><p>'
-    out+=image[0]
+    out+=os.path.basename(image[0])
     out+='</p></div>'
     i=i+1
   out+="</div>"
@@ -114,15 +115,15 @@ def output_html():
       template = template.replace('__DATE__', get_date_interval()+',')
     pics = get_pictures()
     template = template.replace('__GALLERY__', pics);
-    f = open("index.html", "w")
+    f = open(os.path.join(DIR, "index.html"), "w")
     f.write(template)
     f.close()
 
 def create_thumbs():
     for i in images:
-        im = Image.open(i[0])
+        im = Image.open(os.path.join(DIR, i[0]))
         im.thumbnail([im.size[0]/4, im.size[0]/4], Image.ANTIALIAS)
-        thumb = os.path.join(os.path.dirname(i[0]), THUMB_DIR, os.path.basename(i[0]))
+        thumb = os.path.join(DIR, THUMB_DIR, os.path.basename(i[0]))
         im.save(thumb)
 
 

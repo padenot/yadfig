@@ -34,7 +34,7 @@ template='''__TEMPLATE__'''
 THUMB_DIR=".c"
 
 class Generator:
-    def __init__(self, dirname, title = "", place = None, rowcount = DEFAULT_ROWCOUNT):
+    def __init__(self, dirname, title = "", place = "", rowcount = DEFAULT_ROWCOUNT):
         self.dirname = dirname
         self.rowcount = rowcount
         self.place = place

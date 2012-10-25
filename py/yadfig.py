@@ -41,15 +41,20 @@ class Generator:
         self.images = []
 
     def run(self):
-        # TODO stop if error
-        self.list_files()
-        self.images.sort()
-        self.create_thumbs()
-        self.output_html()
+        try:
+            self.list_files()
+            self.images.sort()
+            self.create_thumbs()
+            self.output_html()
+     
+            print bcolors.OKGREEN + "Generation successful:"
+            print "\t" + os.path.join(self.dirname,"index.html")
+            print "\t" + os.path.join(self.dirname,THUMB_DIR)+ " for " + str(len(self.images)) + " pictures." + bcolors.ENDC
 
-        print bcolors.OKGREEN + "Generation successful:"
-        print "\t" + os.path.join(self.dirname,"index.html")
-        print "\t" + os.path.join(self.dirname,THUMB_DIR)+ " for " + str(len(self.images)) + " pictures." + bcolors.ENDC
+        except Warning as warn:
+            print bcolors.WARNING + str(warn) + bcolors.ENDC
+        except Exception as error:
+            print bcolors.FAIL + str(error) + bcolors.ENDC
 
     def is_image(self, mime):
       # TODO return expression
@@ -64,9 +69,7 @@ class Generator:
             if not os.path.exists(full):
                 os.makedirs(full)
         except os.error, err:
-            print bcolors.FAIL + str(err) + bcolors.ENDC
-            # TODO continue boolean
-            exit(1)
+            raise Exception( err )
 
         filenames = os.listdir(self.dirname)
 
@@ -78,8 +81,7 @@ class Generator:
                 metadata.read()
                 self.images.append([name, metadata])
         if len(self.images) == 0:
-            print bcolors.WARNING + "No pictures found in "+self.dirname+", exiting." + bcolors.ENDC
-            exit(1) # TODO continue boolean
+            raise Warning("No pictures found in " + self.dirname + ", terminating generation.")
 
     def get_pictures(self):
       i = 0

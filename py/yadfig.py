@@ -57,10 +57,7 @@ class Generator:
             print bcolors.FAIL + str(error) + bcolors.ENDC
 
     def is_image(self, mime):
-      # TODO return expression
-      if mime.find("image") == 0:
-        return True
-      return False
+      return mime.find("image") == 0
 
     def list_files(self):
         try:

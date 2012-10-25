@@ -33,7 +33,6 @@ TITLE=""
 ROWCOUNT=4
 template='''__TEMPLATE__'''
 THUMB_DIR=".c"
-DIR=os.curdir
 
 images = list()
 
@@ -42,27 +41,27 @@ def is_image(mime):
     return True
   return False
 
-def list_files():
+def list_files(dirname):
     try:
-        os.stat(DIR)
-        full = os.path.join(DIR, THUMB_DIR)
+        os.stat(dirname)
+        full = os.path.join(dirname, THUMB_DIR)
         if not os.path.exists(full):
             os.makedirs(full)
     except os.error, err:
         print bcolors.FAIL + str(err) + bcolors.ENDC
         exit(1)
 
-    filenames = os.listdir(DIR)
+    filenames = os.listdir(dirname)
 
     for name in filenames:
-        full_name = os.path.join(DIR, name)
+        full_name = os.path.join(dirname, name)
         print name
         if is_image(str(mimetypes.guess_type(full_name)[0])):
             metadata = pyexiv2.ImageMetadata(full_name)
             metadata.read()
             images.append([name, metadata])
     if len(images) == 0:
-        print bcolors.WARNING + "No pictures found in "+DIR+", exiting." + bcolors.ENDC
+        print bcolors.WARNING + "No pictures found in "+dirname+", exiting." + bcolors.ENDC
         exit(1)
 
 
@@ -105,7 +104,7 @@ def get_date_interval():
     else:
       return "From the " + dates[0].strftime(formatfull) + " to the " + dates[-1].strftime(formatfull)
 
-def output_html():
+def output_html(dirname):
     global template
     template = template.replace('__TITLE__', TITLE)
     template = template.replace('__PLACE__', PLACE)
@@ -115,15 +114,15 @@ def output_html():
       template = template.replace('__DATE__', get_date_interval()+',')
     pics = get_pictures()
     template = template.replace('__GALLERY__', pics);
-    f = open(os.path.join(DIR, "index.html"), "w")
+    f = open(os.path.join(dirname, "index.html"), "w")
     f.write(template)
     f.close()
 
-def create_thumbs():
+def create_thumbs(dirname):
     for i in images:
-        im = Image.open(os.path.join(DIR, i[0]))
+        im = Image.open(os.path.join(dirname, i[0]))
         im.thumbnail([im.size[0]/4, im.size[0]/4], Image.ANTIALIAS)
-        thumb = os.path.join(DIR, THUMB_DIR, os.path.basename(i[0]))
+        thumb = os.path.join(dirname, THUMB_DIR, os.path.basename(i[0]))
         im.save(thumb)
 
 
@@ -135,13 +134,15 @@ def usage():
     print "\t-d : a directory to operate on."
 
 def main():
-    global TITLE, PLACE, DIR
+    global TITLE, PLACE
     try:
         arg, opts = getopt.getopt(sys.argv[1:], "hp:t:d:")
     except getopt.GetoptError, err:
         print bcolors.WARNING + str(err) + bcolors.ENDC
         usage()
         sys.exit(2)
+
+    DIR=os.curdir
 
     for o, a in arg:
         if o in "-p":
@@ -155,10 +156,10 @@ def main():
             DIR=a
         else:
             assert False, "unhandled option"
-    list_files()
+    list_files(DIR)
     images.sort()
-    create_thumbs()
-    output_html()
+    create_thumbs(DIR)
+    output_html(DIR)
     print bcolors.OKGREEN + "Generation successful:"
     print "\t" + os.path.join(DIR,"index.html")
     print "\t" + os.path.join(DIR,THUMB_DIR)+ " for " + str(len(images)) + " pictures." + bcolors.ENDC

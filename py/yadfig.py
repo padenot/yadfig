@@ -29,6 +29,7 @@ class bcolors:
         self.BOLD = ''
 
 DEFAULT_ROWCOUNT=4
+THUMBNAIL_LIMIT_SIZE=242 # in pixels
 template='''__TEMPLATE__'''
 THUMB_DIR=".c"
 
@@ -136,7 +137,9 @@ class Generator:
     def create_thumbs(self):
         for i in self.images:
             im = Image.open(os.path.join(self.dirname, i[0]))
-            im.thumbnail([im.size[0]/4, im.size[0]/4], Image.ANTIALIAS) # TODO thumbnail with limited size
+            # make a thumbnail only if the size is higher than the thumbnail. If the image is too short, use it as the thumbnail.
+            if im.size[0] > THUMBNAIL_LIMIT_SIZE:
+                im.thumbnail([THUMBNAIL_LIMIT_SIZE, THUMBNAIL_LIMIT_SIZE], Image.ANTIALIAS)
             thumb = os.path.join(self.dirname, THUMB_DIR, os.path.basename(i[0]))
             im.save(thumb)
 

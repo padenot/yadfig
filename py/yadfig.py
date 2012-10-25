@@ -67,7 +67,7 @@ class Generator:
             if not os.path.exists(full):
                 os.makedirs(full)
         except os.error, err:
-            raise Exception( err )
+            raise Exception( "In list_files: " + str(err) )
 
         filenames = os.listdir(self.dirname)
 
@@ -150,18 +150,29 @@ def usage():
     print "\t-p : name of the place the photo have been taken."
     print "\t-t : a title for the page."
     print "\t-d : a directory to operate on."
+    print "\t-r : analyse recursively the directories. In this case, p and t are ignored, the album title is the name of the directory and d is the root of the walk."
+
+def walk(initial_dir):
+    for path, dirs, files in os.walk(initial_dir):
+        last_subpath = path.split("/").pop()
+        if last_subpath != ".c":
+            g = Generator( path, title=last_subpath )
+            g.run()
+
+    # TODO generate an index file in the current directory or another given directory
 
 def main():
     title, place = "", ""
+    recursive = False
+
     try:
-        arg, opts = getopt.getopt(sys.argv[1:], "hp:t:d:")
+        arg, opts = getopt.getopt(sys.argv[1:], "rhp:t:d:")
     except getopt.GetoptError, err:
         print bcolors.WARNING + str(err) + bcolors.ENDC
         usage()
         sys.exit(2)
 
     DIR=os.curdir
-
     for o, a in arg:
         if o in "-p":
             place=a
@@ -172,11 +183,16 @@ def main():
             title=a
         elif o in "-d":
             DIR=a
+        elif o in "-r":
+            recursive = True
         else:
             assert False, "unhandled option"
     
-    g = Generator(dirname = DIR, title = title, place = place)
-    g.run()
+    if recursive:
+        walk( DIR )
+    else:
+        g = Generator(dirname = DIR, title = title, place = place)
+        g.run()
 
 if __name__ == "__main__":
     main()

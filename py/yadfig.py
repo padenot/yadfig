@@ -30,7 +30,9 @@ class bcolors:
 
 DEFAULT_ROWCOUNT=4
 THUMBNAIL_LIMIT_SIZE=242 # in pixels
-template='''__TEMPLATE__'''
+folder_template="""__FOLDER_TEMPLATE__"""
+index_template="""__INDEX_TEMPLATE__"""
+
 THUMB_DIR=".c"
 
 class Generator:
@@ -42,20 +44,26 @@ class Generator:
         self.images = []
 
     def run(self):
+        """Launches the generator in the given directory self.dirname. Returns true iff
+    the page has been generated, i.e. there was no error and the directory contained images."""
         try:
             self.list_files()
             self.images.sort()
             self.create_thumbs()
             self.output_html()
-     
+
             print bcolors.OKGREEN + "Generation successful:"
             print "\t" + os.path.join(self.dirname,"index.html")
             print "\t" + os.path.join(self.dirname,THUMB_DIR)+ " for " + str(len(self.images)) + " pictures." + bcolors.ENDC
 
+            return True
+
         except Warning as warn:
             print bcolors.WARNING + str(warn) + bcolors.ENDC
+            return False
         except Exception as error:
             print bcolors.FAIL + str(error) + bcolors.ENDC
+            return False
 
     def is_image(self, mime):
       return mime.find("image") == 0
@@ -121,8 +129,8 @@ class Generator:
           return "From the " + dates[0].strftime(formatfull) + " to the " + dates[-1].strftime(formatfull)
 
     def output_html(self):
-        global template
-        ctemplate = template.replace('__TITLE__', self.title)
+        global folder_template
+        ctemplate = folder_template.replace('__TITLE__', self.title)
         ctemplate = ctemplate.replace('__PLACE__', self.place)
         if not self.place:
           ctemplate = ctemplate.replace('__DATE__', self.get_date_interval())
@@ -148,18 +156,36 @@ def usage():
     print "Usage:  %s [-p|--place] name [-t|--title] title" % os.path.basename(sys.argv[0])
     print "\n\tCreate a photo gallery in index.html and a thumbnail directory,"+THUMB_DIR+"/.\n"
     print "\t-p : name of the place the photo have been taken."
-    print "\t-t : a title for the page."
+    print "\t-t : a title for the page, in single generation mode. In recursive mode, title of the gallery."
     print "\t-d : a directory to operate on."
-    print "\t-r : analyse recursively the directories. In this case, p and t are ignored, the album title is the name of the directory and d is the root of the walk."
+    print """\t-r : analyse recursively the directories, starting from the directory given by the option -d or the
+    current directory by default. In this case, -p is ignored. Each subdirectory of the current
+    directory is an album whose title is the name of the directory. An index page is generated in the current directory,
+    containing links to the different albums."""
 
-def walk(initial_dir):
+def walk(initial_dir, title):
+    links = []
+
     for path, dirs, files in os.walk(initial_dir):
         last_subpath = path.split("/").pop()
-        if last_subpath != ".c":
+        if last_subpath != THUMB_DIR: # don't apply the recursive call to thumbnails directories
             g = Generator( path, title=last_subpath )
-            g.run()
+            if g.run():
+                links.append( (path, last_subpath) )
 
-    # TODO generate an index file in the current directory or another given directory
+    # generate HTML
+    out = ""
+    for path, dirname in links:
+        out += """  <li>
+        <a href="%s/">%s</a>
+    </li>
+""" % ( path, dirname )
+
+    ctemplate = index_template.replace('__TITLE__', title)
+    ctemplate = ctemplate.replace('__LIST__', out)
+    f = open("index.html", "w")
+    f.write(ctemplate)
+    f.close()
 
 def main():
     title, place = "", ""
@@ -187,9 +213,9 @@ def main():
             recursive = True
         else:
             assert False, "unhandled option"
-    
+
     if recursive:
-        walk( DIR )
+        walk( DIR, title )
     else:
         g = Generator(dirname = DIR, title = title, place = place)
         g.run()

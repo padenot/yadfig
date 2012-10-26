@@ -20,7 +20,7 @@ sed ':a;N;$!ba;s/\n/ /g' out.css | tr -s ' ' > out2.css
 mv out2.css out.css
 
 # insert CSS
-python py/rep.py out.css html/yadfig.html __CSS__ > folder.html
+python py/rep.py out.css html/folder.html __CSS__ > folder.html
 python py/rep.py out.css html/index.html __CSS__ > index.html
 
 # minify js

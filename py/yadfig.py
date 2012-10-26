@@ -163,6 +163,9 @@ def usage():
     directory is an album whose title is the name of the directory. An index page is generated in the current directory,
     containing links to the different albums."""
 
+def tuple_sort( t ):
+    return t[1]
+
 def walk(initial_dir, title):
     links = []
 
@@ -173,6 +176,7 @@ def walk(initial_dir, title):
             if g.run():
                 links.append( (path, last_subpath) )
 
+    links.sort(key=tuple_sort)
     # generate HTML
     out = ""
     for path, dirname in links:

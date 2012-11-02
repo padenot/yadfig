@@ -175,7 +175,8 @@ def usage():
     print """\t-r : analyse recursively the directories, starting from the directory given by the option -d or the
     current directory by default. In this case, -p is ignored. Each subdirectory of the current
     directory is an album whose title is the name of the directory. An index page is generated in the current directory,
-    containing links to the different albums."""
+    containing links to the different albums.
+    \t-v: adds verbosity (more details during the process)."""
 
 def tuple_sort( t ):
     return t[1]

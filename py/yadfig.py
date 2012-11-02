@@ -36,12 +36,13 @@ index_template="""__INDEX_TEMPLATE__"""
 THUMB_DIR=".c"
 
 class Generator:
-    def __init__(self, dirname, title = "", place = "", rowcount = DEFAULT_ROWCOUNT):
+    def __init__(self, dirname, title = "", place = "", rowcount = DEFAULT_ROWCOUNT, verbose = False):
         self.dirname = dirname
         self.rowcount = rowcount
         self.place = place
         self.title = title
         self.images = []
+        self.verbose = verbose
 
     def run(self):
         """Launches the generator in the given directory self.dirname. Returns true iff
@@ -81,7 +82,7 @@ class Generator:
 
         for name in filenames:
             full_name = os.path.join(self.dirname, name)
-            print name
+            if self.verbose: print name
             if self.is_image(str(mimetypes.guess_type(full_name)[0])):
                 metadata = pyexiv2.ImageMetadata(full_name)
                 metadata.read()
@@ -166,13 +167,14 @@ def usage():
 def tuple_sort( t ):
     return t[1]
 
-def walk(initial_dir, title):
+def walk(initial_dir, title, verbose ):
     links = []
 
     for path, dirs, files in os.walk(initial_dir):
         last_subpath = path.split("/").pop()
         if last_subpath != THUMB_DIR: # don't apply the recursive call to thumbnails directories
-            g = Generator( path, title=last_subpath )
+            print path
+            g = Generator( path, title=last_subpath, verbose = verbose )
             if g.run():
                 links.append( (path, last_subpath) )
 
@@ -194,9 +196,10 @@ def walk(initial_dir, title):
 def main():
     title, place = "", ""
     recursive = False
+    verbose = False
 
     try:
-        arg, opts = getopt.getopt(sys.argv[1:], "rhp:t:d:")
+        arg, opts = getopt.getopt(sys.argv[1:], "rhvp:t:d:")
     except getopt.GetoptError, err:
         print bcolors.WARNING + str(err) + bcolors.ENDC
         usage()
@@ -215,13 +218,15 @@ def main():
             DIR=a
         elif o in "-r":
             recursive = True
+        elif o in "-v":
+            verbose = True
         else:
             assert False, "unhandled option"
 
     if recursive:
-        walk( DIR, title )
+        walk( DIR, title, verbose = verbose )
     else:
-        g = Generator(dirname = DIR, title = title, place = place)
+        g = Generator(dirname = DIR, title = title, place = place, verbose = verbose)
         g.run()
 
 if __name__ == "__main__":

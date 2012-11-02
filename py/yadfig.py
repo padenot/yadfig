@@ -48,9 +48,13 @@ class Generator:
         """Launches the generator in the given directory self.dirname. Returns true iff
     the page has been generated, i.e. there was no error and the directory contained images."""
         try:
+            if self.verbose: print "Listing files..."
             self.list_files()
+            if self.verbose: print "Sorting images..."
             self.images.sort()
+            if self.verbose: print "Creating thumbs..."
             self.create_thumbs()
+            if self.verbose: print "Generating html..."
             self.output_html()
 
             print bcolors.OKGREEN + "Generation successful:"

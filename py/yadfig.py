@@ -127,9 +127,18 @@ class Generator:
         formattime = "%H:%M"
         formatfull = formatdate + " at " + formattime
         date1 = dates[0].strftime(formatdate)
-        date2 = dates[1].strftime(formatdate)
+        if len( dates ) > 1:
+            date2 = dates[1].strftime(formatdate)
+        else:
+            date2 = date1
+
         if date1 == date2:
-          return "The " + dates[0].strftime(formatdate) + ", from " + dates[0].strftime(formattime) + " to " + dates[-1].strftime(formattime)
+          time1 = dates[0].strftime(formattime)
+          time2 = dates[-1].strftime(formattime)
+          if time1 != time2:
+              return "The " + date1 + ", from " + time1 + " to " + time2
+          else:
+              return "The " + date1 + " at " + time1
         else:
           return "From the " + dates[0].strftime(formatfull) + " to the " + dates[-1].strftime(formatfull)
 

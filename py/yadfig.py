@@ -184,19 +184,21 @@ def usage():
     current directory by default. In this case, -p is ignored. Each subdirectory of the current
     directory is an album whose title is the name of the directory. An index page is generated in the current directory,
     containing links to the different albums.
-    \t-v: adds verbosity (more details during the process)."""
+    \t-v: adds verbosity (more details during the process).
+    \t-b: absolute path to the base directory, for recursive analysis. It should be the prefix URL to access the
+    generated index.html"""
 
 def tuple_sort( t ):
     return t[1]
 
-def walk(initial_dir, title, verbose ):
+def walk(initial_dir, title, verbose, prefix ):
     links = []
 
     for path, dirs, files in os.walk(initial_dir):
         last_subpath = path.split("/").pop()
         if last_subpath != THUMB_DIR: # don't apply the recursive call to thumbnails directories
             print path
-            g = Generator( path, title=last_subpath, verbose = verbose, root = initial_dir )
+            g = Generator( path, title=last_subpath, verbose = verbose, root = prefix )
             if g.run():
                 links.append( (path, last_subpath) )
 
@@ -221,13 +223,14 @@ def main():
     verbose = False
 
     try:
-        arg, opts = getopt.getopt(sys.argv[1:], "rhvp:t:d:")
+        arg, opts = getopt.getopt(sys.argv[1:], "brhvp:t:d:")
     except getopt.GetoptError, err:
         print bcolors.WARNING + str(err) + bcolors.ENDC
         usage()
         sys.exit(2)
 
-    DIR=os.curdir
+    DIR= os.curdir
+    baseurl = DIR
     for o, a in arg:
         if o in "-p":
             place=a
@@ -238,15 +241,18 @@ def main():
             title=a
         elif o in "-d":
             DIR=a
+            baseurl = DIR
         elif o in "-r":
             recursive = True
         elif o in "-v":
             verbose = True
+        elif o in "-b":
+            baseurl =a
         else:
             assert False, "unhandled option"
 
     if recursive:
-        walk( DIR, title, verbose = verbose )
+        walk( DIR, title, verbose = verbose, prefix = baseurl )
     else:
         g = Generator(dirname = DIR, title = title, place = place, verbose = verbose)
         g.run()

@@ -254,7 +254,7 @@ hgroup > h1 {
   margin : 0.2em;
 }
 
-hgroup > p {
+hgroup > p, .links {
   font-size: 1.5em;
   text-shadow: 4px 4px 4px gray;
   margin-left : 2em;

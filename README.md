@@ -12,8 +12,10 @@ reasonably recent web browser (since it uses HTML5 & co. delicacies), and is ver
 easy to host on any web server, without having to use any server side
 programming, hopefully increasing speed and security.
 
-I could write for hours, but nothing would bet a working demo, so here it is :
-http://paul.cx/photos/sweden/vasa/
+I could write for hours, but nothing would bet a working demo, so here they are:
+
+- http://paul.cx/photos/sweden/vasa/
+- http://benjb.gagahome.fr/galeries/example/
 
 ## Ok, I'm convinced, what next ?
 
@@ -62,7 +64,24 @@ thumbnails. If you want to, you can invoke it that way :
 yadfig -p "The location where the photo were taken" -t "A title"
 ```
 
-It produces a somwhat nicer output.
+It produces a somewhat nicer output.
+
+If you need more details about the execution of the process, just add the verbose option:
+
+```
+yadfig -p "The location" -t "The title" -v
+```
+
+Do you have a lot of images directories and you don't want to launch yadfig in each one? No problem!
+yadfig knows how to generate a collection of albums, with the recursive option. Just launch it from the
+directory containing the albums:
+
+```
+yadfig -t "Example" -r -d /media/photos/ -b "/galeries/example/"
+```
+
+(note that -b gives the url of the base directory containing the sub directories.)
+This one produces a gallery like [this one](http://benjb.gagahome.fr/galeries/example/).
 
 ## Yeah, but it doesn't do _that_ !
 Patches are welcome, but the whole thing is aimed at simplicity.
@@ -71,10 +90,13 @@ Patches are welcome, but the whole thing is aimed at simplicity.
 I haven't tested IE, and Opera for 30 seconds, and it silently failed. There are
 great free and open-source browser you can try instead that happen to work.
 
-## You code is crappy !
+## Your code is crappy !
 I know, I just started with js and web stuff. The codebase quality will
 eventually get better with time. If you see something really nasty, drop me a
 line at [@padenot](http://twitter.com/padenot) or somewhere else.
+
+Contact [@njbenji](http://twitter.com/njbenji) for every complaint related to
+recursive processing.
 
 ## Why hot pink when the text is highlighted ?
 This guy knows why, and I aggree : http://paulirish.com.

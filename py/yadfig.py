@@ -189,14 +189,14 @@ def usage():
 def tuple_sort( t ):
     return t[1]
 
-def walk(initial_dir, title, verbose ):
+def walk(initial_dir, title, verbose, root ):
     links = []
 
     for path, dirs, files in os.walk(initial_dir):
         last_subpath = path.split("/").pop()
         if last_subpath != THUMB_DIR: # don't apply the recursive call to thumbnails directories
             print path
-            g = Generator( path, title=last_subpath, verbose = verbose, root = initial_dir )
+            g = Generator( path, title=last_subpath, verbose = verbose, root = root )
             if g.run():
                 links.append( (path, last_subpath) )
 
@@ -246,7 +246,7 @@ def main():
             assert False, "unhandled option"
 
     if recursive:
-        walk( DIR, title, verbose = verbose )
+        walk( DIR, title, verbose = verbose, root = DIR )
     else:
         g = Generator(dirname = DIR, title = title, place = place, verbose = verbose)
         g.run()

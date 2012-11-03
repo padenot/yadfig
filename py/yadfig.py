@@ -36,13 +36,14 @@ index_template="""__INDEX_TEMPLATE__"""
 THUMB_DIR=".c"
 
 class Generator:
-    def __init__(self, dirname, title = "", place = "", rowcount = DEFAULT_ROWCOUNT, verbose = False):
+    def __init__(self, dirname, title = "", place = "", rowcount = DEFAULT_ROWCOUNT, verbose = False, root = None):
         self.dirname = dirname
         self.rowcount = rowcount
         self.place = place
         self.title = title
         self.images = []
         self.verbose = verbose
+        self.root = root
 
     def run(self):
         """Launches the generator in the given directory self.dirname. Returns true iff
@@ -152,6 +153,13 @@ class Generator:
           ctemplate = ctemplate.replace('__DATE__', self.get_date_interval()+',')
         pics = self.get_pictures()
         ctemplate = ctemplate.replace('__GALLERY__', pics);
+
+        if self.root:
+            link = """<a href="%s">Back to index</a>""" % self.root
+            ctemplate = ctemplate.replace('__BACK_LINK__', link)
+        else:
+            ctemplate = ctemplate.replace('__BACK_LINK__', '')
+
         f = open(os.path.join(self.dirname, "index.html"), "w")
         f.write(ctemplate)
         f.close()
@@ -188,7 +196,7 @@ def walk(initial_dir, title, verbose ):
         last_subpath = path.split("/").pop()
         if last_subpath != THUMB_DIR: # don't apply the recursive call to thumbnails directories
             print path
-            g = Generator( path, title=last_subpath, verbose = verbose )
+            g = Generator( path, title=last_subpath, verbose = verbose, root = initial_dir )
             if g.run():
                 links.append( (path, last_subpath) )
 

@@ -211,7 +211,7 @@ def walk(initial_dir, title, verbose ):
 
     ctemplate = index_template.replace('__TITLE__', title)
     ctemplate = ctemplate.replace('__LIST__', out)
-    f = open("index.html", "w")
+    f = open(os.path.join(initial_dir, "index.html"), "w")
     f.write(ctemplate)
     f.close()
 

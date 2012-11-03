@@ -213,7 +213,7 @@ def walk(initial_dir, title, verbose, prefix ):
 
     ctemplate = index_template.replace('__TITLE__', title)
     ctemplate = ctemplate.replace('__LIST__', out)
-    f = open(os.path.join(initial_dir, "index.html"), "w")
+    f = open("index.html", "w")
     f.write(ctemplate)
     f.close()
 
@@ -223,7 +223,7 @@ def main():
     verbose = False
 
     try:
-        arg, opts = getopt.getopt(sys.argv[1:], "brhvp:t:d:")
+        arg, opts = getopt.getopt(sys.argv[1:], "b:rhvp:t:d:")
     except getopt.GetoptError, err:
         print bcolors.WARNING + str(err) + bcolors.ENDC
         usage()

@@ -1,8 +1,9 @@
 /* Author:
  * Paul
  */
-
+(function() {
 "use strict";
+})();
 
 function $(e) {
   return document.querySelector(e);
@@ -61,8 +62,8 @@ function onClickImage(e) {
 
 function init() {
   var title = $("hgroup h1").innerHTML;
-  var rotated = $(".rotated")
-  var body = $("html")
+  var rotated = $(".rotated");
+  var body = $("html");
   rotated.innerHTML = title;
 
   images = $$('.thumb');
@@ -72,7 +73,7 @@ function init() {
 
   document.onkeydown = function(e) {
     dispatch(e);
-  }
+  };
   $("#close").addEventListener("click", function() {
     diaporamaOut();
   }, false);
@@ -94,7 +95,7 @@ function next(e) {
 
 function prev(e) {
   if (mode == "diaporama") {
-    currentImage = currentImage == 0 ? images.length - 1 : currentImage - 1;
+    currentImage = currentImage === 0 ? images.length - 1 : currentImage - 1;
     var img = $('.diaporama img');
     img.style.opacity = 0;
     img.src = getHiResUrl(images[currentImage].src);

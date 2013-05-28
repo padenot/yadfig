@@ -116,7 +116,8 @@ class Generator:
         dates = list()
         for i in self.images:
           try:
-            dates.append(i[1]['Exif.Image.DateTime'].value)
+            if i[1]['Exif.Image.DateTime'].value:
+              dates.append(i[1]['Exif.Image.DateTime'].value)
           except KeyError:
             continue
         if len(dates) == 0:

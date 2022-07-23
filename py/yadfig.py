@@ -5,7 +5,6 @@ import sys
 import os
 import getopt
 import mimetypes
-import datetime
 import getopt
 from PIL import Image
 

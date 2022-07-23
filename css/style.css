@@ -267,6 +267,8 @@ hgroup > p, .links {
     -webkit-transform-origin: left top;
     -o-transform: rotate(90deg);
     -o-transform-origin: left top;
+    transform: rotate(90deg);
+    transform-origin: left top;
     font-variant: small-caps;
     font-weight: 700;
     left: 99%;
@@ -302,6 +304,8 @@ hgroup > p, .links {
   -webkit-transform: scale(3);
   -o-transition: -o-transform 1s ease-in-out;
   -o-transform: scale(3);
+  transition: 1s ease-in-out;
+  transform: scale(3);
 }
 
 .cell[hires=true] {
@@ -311,6 +315,8 @@ hgroup > p, .links {
   -webkit-transform: scale(1);
   -o-transition: -o-transform 0s ease-in-out;
   -o-transform: scale(1);
+  transition: 0s ease-in-out;
+  transform: scale(1);
   position: absolute;
   top: 10%;
   left: 10%;
@@ -368,6 +374,7 @@ hgroup > p, .links {
   -moz-transform: scale(1);
   -webkit-transform: scale(1);
   -o-transform: scale(1);
+  transform: scale(1);
 }
 
 .diaporama[hide=true] {
@@ -376,6 +383,7 @@ hgroup > p, .links {
   -moz-transform: scale(0.1);
   -webkit-transform: scale(0.1);
   -o-transform: scale(0.1);
+  transform: scale(0.1);
 }
 
 .diaporama > .wrapper {

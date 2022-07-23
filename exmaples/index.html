@@ -1,0 +1,94 @@
+<!doctype html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js ie8 oldie" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+    <title></title>
+    <meta name="description" content="A Damn Fine Image Library">
+    <meta name="author" content="@padenot">
+
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+
+    <style>
+    
+  </style>
+
+  </head>
+  <body onload="init()">
+
+    <a name="top" id="top"></a>
+
+
+    <header>
+      <hgroup>
+        <h1></h1>
+        <p></p>
+      </hgroup>
+    </header>
+    <span class="rotated"></span>
+
+    <div class="wrapper">
+      <div class="row"></div><div class="row"><div class="cell"><img class="thumb" src=".c/DN-SN-90-01120_(20620758292).jpg"><p>DN-SN-90-01120_(20620758292).jpg</p></div><div class="cell"><img class="thumb" src=".c/ISS065-E-258122_-_View_of_Earth.jpg"><p>ISS065-E-258122_-_View_of_Earth.jpg</p></div></div>
+      <br/>
+        
+      </div>
+
+
+      <footer>
+        <p>Made with ten fingers, vim, Firefox &amp; ♥ &mdash;
+          <a href="#top">top</a>
+          <a href="https://github.com/padenot/yadfig">src</a>
+          <a href="http://blog.paul.cx">blog</a>
+        </p>
+      </footer>
+
+      <div class="back" hide="true"></div>
+      <div class="diaporama" hide="true">
+        <div class="wrapper">
+          <div class="ctrlWrap">
+            <span id="prev" class="ctrl">←</span>
+            <span id="close" class="ctrl">&otimes;</span>
+            <span id="next" class="ctrl">→</span>
+          </div>
+        </div>
+      </div>
+
+      <script>
+(function(){"use strict";})();function $(e){return document.querySelector(e);}
+function $$(e){return document.querySelectorAll(e);}
+function indexOf(array,element){var i=array.length;while(i--){if(array[i]===element){return i;}}
+return-1;}
+function getOffset(el){var _x=0;var _y=0;while(el&&!isNaN(el.offsetLeft)&&!isNaN(el.offsetTop)){_x+=el.offsetLeft-el.scrollLeft;_y+=el.offsetTop-el.scrollTop;el=el.offsetParent;}
+return{top:_y,left:_x};}
+var debug=true;var zoomed=null;var mode="gallery";var images=[];var currentImage=-1;function log(msg){if(debug){console.log(msg);}}
+function onClickImage(e){e.stopPropagation();var image=e.target.parentNode;if(!image.getAttribute("zoomed")){diaporamaIn(image);}else{diaporamaOut();}}
+function init(){var title=$("hgroup h1").innerHTML;var rotated=$(".rotated");var body=$("html");rotated.innerHTML=title;images=$$('.thumb');for(var i=0;i<images.length;i++){images[i].addEventListener("click",onClickImage,false);}
+document.onkeydown=function(e){dispatch(e);};$("#close").addEventListener("click",function(){diaporamaOut();},false);$("#prev").addEventListener("click",prev,false);$("#next").addEventListener("click",next,false);}
+function next(e){if(mode=="diaporama"){currentImage=(currentImage+1)%images.length;var img=$('.diaporama img');img.style.opacity=0;img.src=getHiResUrl(images[currentImage].src);checkImageSize();}}
+function prev(e){if(mode=="diaporama"){currentImage=currentImage===0?images.length-1:currentImage-1;var img=$('.diaporama img');img.style.opacity=0;img.src=getHiResUrl(images[currentImage].src);checkImageSize();}}
+function diaporamaIn(initialCell){mode="diaporama";backgroundIn();currentImage=indexOf(images,initialCell.querySelector('img, video'));var d=$('.diaporama');var wrap=d.querySelector(".wrapper");var ctrl=wrap.querySelector(".ctrlWrap");d.removeAttribute("hide");var image=document.createElement("img");image.src=getHiResUrl(initialCell.querySelector('img').src);image.addEventListener("click",clickDiaporama,false);wrap.insertBefore(image,ctrl);var caption=document.createElement("p");caption.innerHTML=initialCell.querySelector("p").innerHTML;wrap.insertBefore(caption,ctrl);checkImageSize();}
+function clickDiaporama(e){if(e.clientX<getOffset(e.target).left+e.target.offsetWidth/2){prev(e);}else{next(e);}}
+function checkImageSize(){var wrapper=$('.diaporama .wrapper');var i=wrapper.querySelector("img");i.style.height="";i.style.width="";i.addEventListener("load",function(){var height=i.naturalHeight;var width=i.naturalWidth;if(height>window.innerHeight*0.8||width>window.innerWidth*0.8){if(width/window.innerWidth*0.8>height/window.innerHeight*0.8){i.style.width=window.innerWidth*0.8+"px";}else{i.style.height=window.innerHeight*0.8+"px";}}
+i.style.opacity=1;},false);}
+function diaporamaOut(){var d=$('.diaporama .wrapper');d.removeChild(d.querySelector("p"));d.removeChild(d.querySelector("img"));$('.diaporama').setAttribute("hide","true");mode="gallery";backgroundOut();}
+function backgroundIn(){var back=$('.back');back.removeAttribute("hide");}
+function backgroundOut(){$(".wrapper").style.filter="";var back=$(".back");back.setAttribute("hide","true");}
+function dispatch(e){switch(e.keyCode){case 27:if(mode=="diaporama"){diaporamaOut();}
+break;case 32:break;case 74:case 39:next(e);break;case 75:case 37:prev(e);break;case 191:break;default:log(e.keyCode);}}
+function getHiResUrl(thumbUrl){var regexp=new RegExp("^(.*)\.c/(.*)$");var matches=regexp.exec(thumbUrl);if(matches.length==3){return matches[1]+matches[2];}
+return"";}
+
+</script>
+
+      <!--[if lt IE 7 ]>
+	<script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.2/CFInstall.min.js"></script>
+	<script>window.attachEvent("onload",function(){CFInstall.check({mode:"overlay"})})</script>
+<![endif]-->
+    </body>
+  </html>
+
+

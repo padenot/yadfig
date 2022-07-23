@@ -3,7 +3,7 @@
 ## Once was genethumb.sh…
 
 Yes, it worked quite nicely, but it was kind of ugly and sucked (according to
-its creator). At the price of a few dependencies (`pyexiv2` and PIL, since I don't
+its creator). At the price of a few dependencies (`PIL`, since I don't
 consider python to be a real dependency on a machine that will host pictures),
 you can have something much nicer (in my point of view).
 
@@ -15,29 +15,24 @@ programming, hopefully increasing speed and security.
 I could write for hours, but nothing would bet a working demo, so here they are:
 
 - http://paul.cx/photos/sweden/vasa/
-- http://benjb.gagahome.fr/galeries/example/
+- https://okok7711.github.io/yadfig/examples/
 
 ## Ok, I'm convinced, what next ?
 
 ### I just want to use it, you know…
-Then grab `yadfig` in the download section, make sure to have `pyexiv2` & `PIL`
+Then grab `yadfig` in the download section, make sure to have `PIL`
 installed (as well as Python, of course), and you're good to go.
 
 ### I want to build it myself from source…
 
-You need to install the dependencies : `jsmin` and a couple Python libraries. On
-a Debian-like system, this line should do the job:
+Just run the `build.sh`, it should install everything for you.
 
-    sudo aptitude install python-pyexiv2 python-imaging
+    sudo sh build.sh
 
 The build script uses `sed` (any flavor) and `tr`, but everybody should have
-those. Also, put a copy of `jsmin` (compiled from 
-[this file](http://www.crockford.com/javascript/jsmin.c)), and put it somewhere in
-the `$PATH`. `pyexiv2` should be in version 0.3, there is an API compatibility
-break somewhere in the previous versions.
+those.
 
-Speaking of build script, here are the steps to install it when dependencies are
-satisfied :
+Speaking of build script, here are the steps to install it:
 
 ``` sh
 git clone https://github.com/padenot/yadfig
@@ -105,5 +100,5 @@ This guy knows why, and I aggree : http://paulirish.com.
 New BSD License : http://www.freebsd.org/copyright/license.html
 
 ## Tools
-js, html5 & css3, python, PIL, pyexiv2, sh, vim, html5boilerplate, obviously
+js, html5 & css3, python, PIL, sh, vim, html5boilerplate, obviously
 Firefox and Chromium, love.

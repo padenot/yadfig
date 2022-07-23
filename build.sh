@@ -19,7 +19,7 @@ mv out2.css out.css
 python py/rep.py out.css html/folder.html __CSS__ > folder.html
 python py/rep.py out.css html/index.html __CSS__ > index.html
 
-cat js/script.js > out.js
+python -m jsmin js/script.js > out.js
 
 # insert js
 python py/rep.py out.js index.html __SCRIPT__ > index2.html

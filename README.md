@@ -15,7 +15,7 @@ programming, hopefully increasing speed and security.
 I could write for hours, but nothing would bet a working demo, so here they are:
 
 - http://paul.cx/photos/sweden/vasa/
-- https://okok7711.github.io/yadfig/examples/
+- https://okok7711.github.io/yadfig/examples/index.html
 
 ## Ok, I'm convinced, what next ?
 

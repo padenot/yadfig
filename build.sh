@@ -2,7 +2,7 @@
 
 fail() {
     echo $1;
-    exit 1
+    exit 1;
 }
 
 # Dependancies check
@@ -13,15 +13,12 @@ python -m pip install -r requirements.txt 2> /dev/null || fail "Cant install req
 chmod +x comments.sed
 # remove comments from css
 ./comments.sed < css/style.css > out.css
-# remove space
 sed ':a;N;$!ba;s/\n/ /g' out.css | tr -s ' ' > out2.css
 mv out2.css out.css
 
-# insert CSS
 python py/rep.py out.css html/folder.html __CSS__ > folder.html
 python py/rep.py out.css html/index.html __CSS__ > index.html
 
-# minify js
 cat js/script.js > out.js
 
 # insert js

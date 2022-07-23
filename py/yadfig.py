@@ -65,9 +65,9 @@ class Generator:
             self.output_html()
 
             print(f"{bcolors.OKGREEN} Generation successful:")
-            print("\t") + os.path.join(self.dirname, "index.html")
-            print("\t") + os.path.join(self.dirname, THUMB_DIR) + \
-                " for " + str(len(self.images)) + " pictures." + bcolors.ENDC
+            print("\t" + os.path.join(self.dirname, "index.html"))
+            print("\t" + os.path.join(self.dirname, THUMB_DIR) + \
+                " for " + str(len(self.images)) + " pictures." + bcolors.ENDC)
             return True
         except Warning as warn:
             print(bcolors.WARNING + str(warn) + bcolors.ENDC)
@@ -76,7 +76,7 @@ class Generator:
             print(bcolors.FAIL + str(error) + bcolors.ENDC)
             return False
 
-    def is_image(self, mime): return mime.find("image") == 0
+    def is_image(self, mime: str, file: str): return (mime.find("image") == 0) and (not file.endswith(("svg", "gif")))
 
     def list_files(self):
         try:
@@ -93,7 +93,7 @@ class Generator:
             full_name = os.path.join(self.dirname, name)
             if self.verbose:
                 print(name)
-            if self.is_image(str(mimetypes.guess_type(full_name)[0])):
+            if self.is_image(str(mimetypes.guess_type(full_name)[0]), name):
                 self.images.append([name])
         if len(self.images) == 0:
             raise Warning("No pictures found in " +
@@ -135,9 +135,9 @@ class Generator:
             # make a thumbnail only if the size is higher than the thumbnail. If the image is too short, use it as the thumbnail.
             if im.size[0] > THUMBNAIL_LIMIT_SIZE:
                 im.thumbnail(
-                    [THUMBNAIL_LIMIT_SIZE, THUMBNAIL_LIMIT_SIZE], Image.ANTIALIAS)
+                    [THUMBNAIL_LIMIT_SIZE, THUMBNAIL_LIMIT_SIZE], Image.Resampling.LANCZOS)
             thumb = os.path.join(self.dirname, THUMB_DIR,
-                                 os.path.basename(i[0]))
+                                os.path.basename(i[0]))
             im.save(thumb)
 
 

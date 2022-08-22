@@ -2,29 +2,24 @@
 
 fail() {
     echo $1;
-    exit 1
+    exit 1;
 }
 
 # Dependancies check
 sed 's///' /dev/null 2> /dev/null|| fail "Missing sed"
-jsmin < /dev/null 2> /dev/null || fail "Missing a jsmin in PATH"
 python --version 2> /dev/null || fail "Missing python"
-python -c "import Image" 2> /dev/null || fail "Missing PIL (Python Imaging Library)"
-python -c "import pyexiv2" 2> /dev/null || fail "Missing pyexiv2 (python EXIF library)"
+python -m pip install -r requirements.txt 2> /dev/null || fail "Cant install requirements"
 
 chmod +x comments.sed
 # remove comments from css
 ./comments.sed < css/style.css > out.css
-# remove space
 sed ':a;N;$!ba;s/\n/ /g' out.css | tr -s ' ' > out2.css
 mv out2.css out.css
 
-# insert CSS
 python py/rep.py out.css html/folder.html __CSS__ > folder.html
 python py/rep.py out.css html/index.html __CSS__ > index.html
 
-# minify js
-jsmin < js/script.js > out.js
+python -m jsmin js/script.js > out.js
 
 # insert js
 python py/rep.py out.js index.html __SCRIPT__ > index2.html
